@@ -16,10 +16,7 @@ import { Link, Navigate, useOutletContext } from "react-router-dom"
 
 export default function SeedPhraseSelection() {
 
-  const { accessToken, seedPhrase } = useOutletContext<LayoutOutletContext>()
-  if (!accessToken) {
-    return <Navigate to="/login" replace />
-  }
+  const { seedPhrase } = useOutletContext<LayoutOutletContext>()
   if (seedPhrase) {
     return <Navigate to="/wallets" replace />
   }

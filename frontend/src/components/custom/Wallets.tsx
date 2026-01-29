@@ -15,17 +15,8 @@ import { mnemonicToSeedSync } from "@scure/bip39"
 import { Plus } from 'lucide-react';
 import { Button } from "@/components/ui/button"
 import type { Wallet } from "@/lib/wallet"
-import WalletActionDisplay from "./WalletActionDisplay"
-import WalletListDisplay from "./WalletListDisplay"
 import { generateWallets } from "@/lib/wallet.ts"
-import WalletSelector from "./WalletSelector"
-import TransactionTable from "./Transactions"
-import { AppSidebar } from "@/components/app-sidebar"
-import { SiteHeader } from "@/components/site-header"
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
-import { ChartAreaInteractive } from "../chart-area-interactive"
-import { SectionCards } from "../section-cards"
-import { DataTable } from "../data-table"
+import WalletListDisplay from "./WalletListDisplay"
 
 
 
@@ -40,7 +31,6 @@ export default function Wallets() {
   const [noSolWallets, setNoSolWallets] = useState(1)
   const [noEthWallets, setNoEthWallets] = useState(1)
   const [wallets, setWallets] = useState<Wallet[]>([])
-  const [selectedWallet, setSelectedWallets] = useState(0)
   useEffect(() => {
     const seed = mnemonicToSeedSync(seedPhrase);
     async function addNewWallets() {
@@ -51,33 +41,12 @@ export default function Wallets() {
         wallet.currentBalance = await wallet.getBalance();
       }
       setWallets(() => [...generatedWallets])
-      setSelectedWallets(1)
 
     }
     addNewWallets();
 
 
   }, [seedPhrase, noSolWallets, noEthWallets])
-  if (selectedWallet > 0 && noSolWallets) {
-    console.log(selectedWallet, noSolWallets, wallets)
-    return (
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <SiteHeader />
-
-          <div className="p-6 space-y-6">
-            <h1 className="text-2xl font-semibold">Dashboard</h1>
-            <SectionCards />
-            <ChartAreaInteractive />
-            <DataTable data={[]} />
-          </div>
-
-        </SidebarInset>
-      </SidebarProvider>
-
-    )
-  }
 
 
   return (
