@@ -10,9 +10,11 @@ import {
 } from "@/components/ui/card"
 import { useState } from "react"
 import { copyFunctionWithToast } from "./CopyToClipboardButton"
+import { EyeIcon, EyeOffIcon } from "lucide-react"
 
 interface WalletListDisplayProps {
   wallet: Wallet
+  selected: boolean
 }
 
 export default function WalletListDisplay(props: WalletListDisplayProps) {
@@ -23,36 +25,36 @@ export default function WalletListDisplay(props: WalletListDisplayProps) {
   }
   return (
 
-    <Card className=" w-full my-5">
-      <CardHeader>
-        <CardTitle>
-          <p className="mb-3">Wallet {wallet.srno}</p>
-        </CardTitle>
+    <div className=" w-full my-5 border rounded-lg border-collapse">
 
+      <div className="border-bottom rounded-md p-3">
+        <p className=" mb-0 text-2xl">Wallet {wallet.srno}</p>
+      </div>
+      <div className="bg-card p-3">
         <p
-          className="cursor-pointer"
+          className="cursor-pointer text-lg mb-3 text-foreground"
           onClick={() => copyFunctionWithToast(wallet.publicKey || "")}
         >Public Key: {wallet.publicKey && truncateString(wallet.publicKey)}</p>
-        <CardDescription>
-
+        <div className="flex gap-2 ">
           <p
-            className="cursor-pointer"
+            className="cursor-pointer inline text-md  text-muted-foreground pb-4"
             onClick={() => copyFunctionWithToast(wallet.privateKey || "")}
           >Private Key:
-            {wallet.privateKey && showPrivateKey ? wallet.privateKey : "*".repeat(wallet.privateKey ? wallet.privateKey.length : 1)} </p>
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p>
-          The card component supports a size prop that can be set to
-          &quot;sm&quot; for a more compact appearance.
-        </p>
-      </CardContent>
-      <CardFooter>
-        <Button variant="outline" size="sm" className="w-full">
-          Action
-        </Button>
-      </CardFooter>
-    </Card>
+            {wallet.privateKey && showPrivateKey ? wallet.privateKey : "*".repeat(wallet.privateKey ? wallet.privateKey.length : 1)}
+          </p>
+
+          <span >
+            {showPrivateKey ?
+              <EyeIcon onClick={() => setShowPrivateKey(prev => !prev)} /> :
+              <EyeOffIcon onClick={() => setShowPrivateKey(prev => !prev)} />}
+          </span>
+        </div>
+
+        <Button variant="outline" size="sm" className="w-full cursor-pointer border
+          border-primary ">
+          Select</Button>
+      </div>
+    </div>
+
   )
 }

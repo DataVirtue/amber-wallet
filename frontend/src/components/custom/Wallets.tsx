@@ -30,6 +30,7 @@ export default function Wallets() {
 
   const [noSolWallets, setNoSolWallets] = useState(1)
   const [noEthWallets, setNoEthWallets] = useState(1)
+  const [selectedWallet, setSelectedWallet] = useState(null)
   const [wallets, setWallets] = useState<Wallet[]>([])
   useEffect(() => {
     const seed = mnemonicToSeedSync(seedPhrase);
@@ -47,7 +48,6 @@ export default function Wallets() {
 
 
   }, [seedPhrase, noSolWallets, noEthWallets])
-
 
   return (
     <>
