@@ -1,31 +1,29 @@
-import type { Wallet } from "@/lib/wallet"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import { useState } from "react"
 import { copyFunctionWithToast } from "./CopyToClipboardButton"
 import { EyeIcon, EyeOffIcon } from "lucide-react"
+import type { Wallet } from "@/lib/wallet"
+import WalletTransactionModal from "./WalletTransactionModal"
+
+
+
 
 interface WalletListDisplayProps {
   wallet: Wallet
   selected: boolean
+  setSelected: () => void // should set the selected wallet in parent component
+  unSetSelected: () => void // should unset the selected wallet in parent component
 }
 
 export default function WalletListDisplay(props: WalletListDisplayProps) {
-  const { wallet } = props
+  const { wallet, selected, setSelected, unSetSelected } = props
   const [showPrivateKey, setShowPrivateKey] = useState(false)
   function truncateString(keyStr: string) {
     return keyStr.slice(0, 10) + "......." + keyStr.slice(keyStr.length - 10)
   }
   return (
 
-    <div className=" w-full my-5 border rounded-lg border-collapse">
+    <div className=" max-w-2xl my-5 border rounded-lg border-collapse">
 
       <div className="border-bottom rounded-md p-3">
         <p className=" mb-0 text-2xl">Wallet {wallet.srno}</p>
@@ -50,10 +48,16 @@ export default function WalletListDisplay(props: WalletListDisplayProps) {
           </span>
         </div>
 
-        <Button variant="outline" size="sm" className="w-full cursor-pointer border
+        <Button
+          onClick={setSelected}
+          variant="outline" size="sm" className="w-full cursor-pointer border
           border-primary ">
           Select</Button>
       </div>
+      {selected &&
+        <WalletTransactionModal wallet={wallet} unSetSelected={unSetSelected} />
+      }
+
     </div>
 
   )

@@ -30,8 +30,9 @@ export default function Wallets() {
 
   const [noSolWallets, setNoSolWallets] = useState(1)
   const [noEthWallets, setNoEthWallets] = useState(1)
-  const [selectedWallet, setSelectedWallet] = useState(null)
+  const [selectedWallet, setSelectedWallet] = useState<Number>(-1)
   const [wallets, setWallets] = useState<Wallet[]>([])
+  console.log("selectedWallet", selectedWallet);
   useEffect(() => {
     const seed = mnemonicToSeedSync(seedPhrase);
     async function addNewWallets() {
@@ -54,8 +55,8 @@ export default function Wallets() {
       <section className="border p- m-4 rounded-xl">
         <Accordion type="single" collapsible>
           <AccordionItem value="item-1">
-            <AccordionTrigger className="text-4xl">Your Seed Phrase</AccordionTrigger>
-            <AccordionContent>
+            <AccordionTrigger className="text-4xl px-2">Your Seed Phrase</AccordionTrigger>
+            <AccordionContent className="mx-3">
               <SeedPhraseTable seedPhrase={seedPhrase} tableLabelText="List of your Seed Phrases" />
               <CopyToClipboardButton copyString={seedPhrase} />
             </AccordionContent>
@@ -69,11 +70,18 @@ export default function Wallets() {
             <TabsTrigger value="ethereum">Ethereum</TabsTrigger>
           </TabsList>
           <TabsContent value="solana">
-            {
-              ...wallets.map(wallet => (
-                wallet.chain == 'solana' &&
-                <WalletListDisplay wallet={wallet} />
-              ))}
+            <div className="grid grid-cols-1  lg:grid-cols-2 gap-3">
+
+              {
+                ...wallets.map((wallet, i) => (
+                  wallet.chain == 'solana' &&
+                  <WalletListDisplay wallet={wallet} selected={i === selectedWallet ? true : false}
+                    setSelected={() => setSelectedWallet(i)}
+                    unSetSelected={() => setSelectedWallet(-1)}
+                  />
+                ))}
+            </div>
+
             <div className="flex justify-center">
               <Button
                 onClick={() => setNoSolWallets((prev) => prev + 1)}
@@ -86,12 +94,17 @@ export default function Wallets() {
           </TabsContent>
 
           <TabsContent value="ethereum">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+              {
+                ...wallets.map((wallet, i) => (
+                  wallet.chain == 'ethereum' &&
+                  <WalletListDisplay wallet={wallet} selected={i === selectedWallet ? true : false}
+                    setSelected={() => setSelectedWallet(i)}
+                    unSetSelected={() => setSelectedWallet(-1)}
 
-            {
-              ...wallets.map(wallet => (
-                wallet.chain == 'ethereum' &&
-                <WalletListDisplay wallet={wallet} />
-              ))}
+                  />
+                ))}
+            </div>
             <div className="flex justify-center">
               <Button
                 onClick={() => setNoEthWallets((prev) => prev + 1)}
