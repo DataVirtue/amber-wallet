@@ -1,6 +1,7 @@
 import { ArrowUpToLine, ArrowDownToLine, ArrowRightLeft } from "lucide-react"
 import ReceiveQrModal from "./RecieveQrModal"
-import SendCryptoModal from "./SendModal"
+import SendCryptoModal from "./SendCryptoModal"
+import SwapModal from "./SwapModal"
 import type { Wallet } from "@/lib/wallet"
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
@@ -59,7 +60,9 @@ export default function WalletTransactionModal(props: WalletTransactionModalProp
                         </span>
                     </div>
                     <div className="flex flex-col items-center">
-                        <Button size="icon-lg" variant="outline" className="rounded-full mb-1 cursor-pointer hover:translate-y-px"><ArrowRightLeft /></Button>
+                        <Button
+                            onClick={() => setWalletAction("swap")}
+                            size="icon-lg" variant="outline" className="rounded-full mb-1 cursor-pointer hover:translate-y-px"><ArrowRightLeft /></Button>
                         <span className="block text-center text-sm">
                             Swap
                         </span>
@@ -70,6 +73,10 @@ export default function WalletTransactionModal(props: WalletTransactionModalProp
                 }{
                     walletAction === "receive" &&
                     <ReceiveQrModal walletAddress={wallet.publicKey || ""} setWalletAction={setWalletAction} chain={wallet.chain} />
+                }
+                {
+                    walletAction === "swap" &&
+                    <SwapModal wallet={wallet} setWalletAction={setWalletAction} />
                 }
                 <Button className="cursor-pointer mt-5 w-full" variant="outline" onClick={() => unSetSelected()}>
                     Close
